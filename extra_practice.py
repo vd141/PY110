@@ -17,7 +17,7 @@ sets are mutable, but the individual members must be immutable
 '''
 
 '''
-Does it follow best practices to use a float as a dictionary key?
+Is it best practice to use a float as a dictionary key?
 
 It does not because of floating point precision issues.
 '''
@@ -65,4 +65,40 @@ frozenset is an immutable set
 >>> zipped_pairs = zip(keys, values)
 >>> dict(zipped_pairs)
 {'a': 1, 'b': 2, 'c': 3}
+'''
+
+'''
+String methods
+
+what is the differnce between str.index() and str.find()?
+- str.index returns the starting index of the argument. it throws an exception if
+the argument isn't found
+- str.find returns the starting index of th argument. it returns -1 if the argument 
+isn't found
+
+
+What does the third argument of str.replace() do?
+it specifies the number of times the function will replace the first argument
+with the second argument in the parent string
+
+What does this code do?
+>>> 'Straße'.swapcase().swapcase()
+
+What does the str.split()'s second parameter do?
+specifies the number of splits to perform
+
+How can you split each character in the string 'abacus'?
+list('abacus')
+
+What does str(None) return?
+'None'
+
+what does the str() function do to its argument when the argument is a collectible?
+it returns a string that denotes the collectible's literal representation
+
+What does this code do?
+>>> str(frozenset([1, 2, 3]))
+
+it coerces its argument to a string representing a frozenset 'literal'. 
+it also changes frozenset's argument from a list literal into a set literal
 '''
