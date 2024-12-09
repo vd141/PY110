@@ -102,3 +102,95 @@ What does this code do?
 it coerces its argument to a string representing a frozenset 'literal'. 
 it also changes frozenset's argument from a list literal into a set literal
 '''
+
+'''
+what does a dict's setdefault method do?
+
+it takes two arguments, a key and a value. if the key already exists in the dictionary,
+then the method returns its existing value. if the key does not exist, it creates
+a key value pair and returns the value
+'''
+
+'''
+how would we create a dictionary the records the number of occurences of each letter
+of a string?
+'''
+a_string = 'the quick brown fox jumps over the lazy dog'
+occurences = {}
+for letter in a_string:
+    occurences.setdefault(letter, 0)
+    occurences[letter] += 1
+
+print(occurences)
+
+'''
+what is the difference between the pop and popitem dictionary methods?
+
+the pop method takes a key as an argument, deletes the key value pair from the dict, 
+and returns the value. it raises an exception if the key does not exist. the second 
+argument can be used as the return value if the key does not exist
+
+the popitem method takes no arguments and returns a keyerror if the dict is empty. 
+it returns the last key-value pair in the dict as a tuple
+'''
+
+'''
+what is the difference between the | and |= operators when used with dicts?
+| returns a new dict that is a "concatenation" of its operands
+|= concatenates the two dicts by mutating its left operand
+
+if a key-value pair is shared between the two dicts, the value in the left operand
+is overwritten with the value in the right operand
+'''
+
+'''
+set comparisons
+issubset, issuperset, <=, >=, <, >
+'''
+
+'''
+set operations
+union, |, intersection, &, difference, and -
+
+does the union method mutate the set?
+it does not
+'''
+
+'''
+set methods:
+ add, remove, discard, pop, clear
+ add adds an element to the set and does not do anything if the element is already in
+ remove removes an element from the set and throws an error if the argument is not in the set
+ discard removes an element from the set and does not throw an error if the argument is not in
+ pop removes an arbitrary element from the set. raises a keyerror if the set is empty
+ clear empties the set of elements
+
+
+disjoint method
+
+returns boolean based on whether the sets share no elements (True) or not do (False)
+In other words, returns True if the intersection is empty
+'''
+
+'''
+what happens if a dictionary is converted into a set?
+
+only the dictionary's keys are stored in the set
+'''
+
+'''
+unpacking collectibles and dicts
+* unary operator unpacks most collectibles except dicts and strings
+** unary operator unpacks dicts
+'''
+
+'''
+other uses of the ** unary operator: keyword arguments
+
+keyword arguments are function arguments that contain a variable name assigned to a value
+
+def a_function(**kwargs)
+
+inside the function, kwargs becomes a dictionary containing all the variable/value pairs
+as key/value pairs
+'''
