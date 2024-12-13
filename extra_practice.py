@@ -194,3 +194,40 @@ def a_function(**kwargs)
 inside the function, kwargs becomes a dictionary containing all the variable/value pairs
 as key/value pairs
 '''
+
+'''
+list sort method
+'''
+
+'''
+Given two sets, how would you obtain a set that contains all the unique values from
+both sets?
+'''
+a = {1, 2, 3, 4}
+b = {3, 4, 5, 6}
+a | b
+a.union(b)
+
+'''
+calculate the total age. Separately, find the minimum age
+'''
+ages = {
+    "Herman": 32,
+    "Lily": 30,
+    "Grandpa": 5843,
+    "Eddie": 10,
+    "Marilyn": 22,
+    "Spot": 237,
+}
+
+'''
+Create a dictionary that represents the frequency of occurrence of each letter. the
+frequency count should be case-sensitive
+'''
+statement = "The Flintstones Rock"
+
+'''
+What does the following code print and why?
+'''
+dictionary = {'a': 'ant', 'b': 'bear'}
+print(dictionary.popitem())
