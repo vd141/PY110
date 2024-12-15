@@ -17,11 +17,16 @@ def ask_for_five():
     five_inputs = []
 
     for number in range(1,6):
-        user_input = validate_input(number)
+        user_input = get_first_five_input(number)
         five_inputs.append(user_input)
-    
+
     return five_inputs
-        
+
+def ask_for_sixth():
+    '''
+    ask for the sixth input. 
+    '''
+    pass
 
 def suffix(number):
     '''
@@ -39,20 +44,46 @@ def suffix(number):
             return 'rd'
         case _ if number >= 4:
             return 'th'
-        
-def validate_input(number):
+
+def valid_numerical_input(user_input):
     '''
     reprompt user to enter input again if the input cannot be coerced to a float
     or an int
     '''
+    try:
+        user_input = int(user_input)
+        return True
+    except ValueError:
+        print('Input must be an integer.')
+        return False
+
+def get_first_five_input(number):
+    '''
+    prompts user for input using input string
+    '''
     while True:
-        try:
-            user_input = int(input(f'Enter the {number}{suffix(number)} number: '))
-            user_input = float(input(f'Enter the {number}{suffix(number)} number: '))
-            return user_input
-        except ValueError:
-            print('Input must be a float or an integer number.')
+        user_input = input(f'Enter the {number}{suffix(number)} number: ')
+        if valid_numerical_input(user_input):
+            return float(user_input)
 
+'''print(ask_for_five())'''
 
-    
-ask_for_six()
+'''
+simple version
+'''
+numbers = []
+
+numbers.append(input('Enter the 1st number: '))
+numbers.append(input('Enter the 2nd number: '))
+numbers.append(input('Enter the 3rd number: '))
+numbers.append(input('Enter the 4th number: '))
+numbers.append(input('Enter the 5th number: '))
+
+numbers_list = ', '.join(numbers)
+
+# last_number = input('Enter the last number: ')
+
+# if last_number in numbers:
+#     print(f'{last_number} is in {numbers_list}.')
+# else:
+#     print(f'{last_number} is not in {numbers_list}.')
