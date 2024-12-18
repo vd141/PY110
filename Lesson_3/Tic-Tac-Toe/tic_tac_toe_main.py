@@ -313,7 +313,7 @@ def declare_starting_player(player):
     player = str(player)
     player = player.strip('{}\'')
     if player == 'computer':
-        print(f'==> The computer is the starting player.')
+        print('==> The computer is the starting player.')
     else:
         print('==> You are the starting player.')
 
@@ -340,7 +340,7 @@ def main():
         - No return value. Prints game display and messages to console
     '''
 
-    (player_positions, computer_positions, 
+    (player_positions, computer_positions,
      current_player) = create_fresh_game_board()
 
     while True:
