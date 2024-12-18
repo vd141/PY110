@@ -5,7 +5,7 @@ import os
 import random
 import time
 
-ALL_VALID_POSITIONS = {'1', 
+ALL_VALID_POSITIONS = {'1',
                 '2', 
                 '3', 
                 '4', 
@@ -36,6 +36,11 @@ POSITION_ROWS = {
 }
 
 
+PLAYERS = {
+    'computer',
+    'user',
+}
+
 def display_welcome():
     '''
     Displays welcome message.
@@ -50,7 +55,7 @@ def display_welcome():
     print('==> Welcome to Tic-Tac-Toe. This is the starting board:')
 
 
-def display_board(player_positions = {}, computer_positions = {}):
+def display_board(player_positions = None, computer_positions = None):
     '''
     prints board based on user positions and computer positions
 
@@ -61,6 +66,11 @@ def display_board(player_positions = {}, computer_positions = {}):
     Outputs:
         - prints board to console, returns None
     '''
+
+    if player_positions is None:
+        player_positions = set()
+    if computer_positions is None:
+        computer_positions = set()
 
     board = [
         '==> You: O, Computer: X',
@@ -106,7 +116,7 @@ def valid_positions(user_input, player_positions, computer_positions):
     if user_input in occupied_positions:
         print('==> Value must be one of the available positions.')
         return False
-    
+
     return True
 
 
@@ -176,7 +186,7 @@ def is_board_full(player_positions, computer_positions):
     '''
     occupied_positions = player_positions.union(computer_positions)
 
-    return (occupied_positions.intersection(ALL_VALID_POSITIONS) == 
+    return (occupied_positions.intersection(ALL_VALID_POSITIONS) ==
         ALL_VALID_POSITIONS)
 
 
@@ -202,8 +212,8 @@ def is_play_again():
 
 def create_fresh_game_board():
     '''
-    clears the console, resets computer and user positions, and prints welcome
-    message and board
+    clears the console, resets computer and user positions, selects first player
+    and prints welcome message and board
 
     Inputs:
         - none
@@ -216,60 +226,167 @@ def create_fresh_game_board():
     computer_positions = set()
     display_welcome()
     display_board(player_positions, computer_positions)
-    return (player_positions, computer_positions)
+    current_player = choose_starting_player()
+    declare_starting_player(current_player)
+    return (player_positions, computer_positions, current_player)
+
+
+def player_updates_game(player_positions, computer_positions):
+    '''
+    gets user input, updates player positions, clears console, and updates
+    console
+
+    side effects: mutates player positions
+
+    Inputs:
+        - player_positions (set of player-occupied positions),
+            computer_positions (set of computer-occupied positions)
+    Outputs:
+        - None
+    '''
+
+    player_input = get_user_input(player_positions, computer_positions)
+    player_positions.add(player_input)
+    os.system('clear')
+    print(f'==> You chose {player_input}')
+    display_board(player_positions, computer_positions)
+
+def computer_updates_game(player_positions, computer_positions):
+    '''
+    gets computer choice, updates computer positions, clears console, and updates
+    console
+
+    side effects: mutates computer positions
+
+    Inputs:
+        - player_positions (set of player-occupied positions),
+            computer_positions (set of computer-occupied positions)
+    Outputs:
+        - None
+    '''
+
+    computer_input = get_computer_input(player_positions, computer_positions)
+    computer_positions.add(computer_input)
+    os.system('clear')
+    print(f'==> Computer chose {computer_input}')
+    display_board(player_positions, computer_positions)
+
+
+def farewell_sequence():
+    '''
+    displays goodbye message for 5 secons, then clears console
+    
+    Inputs:
+        - none
+    Outputs:
+        - none
+    '''
+
+    print('==> Thank you for playing. Goodbye!')
+    time.sleep(5)
+    os.system('clear')
+
+
+def choose_starting_player():
+    '''
+    selects a starting player randomly
+
+    Inputs:
+        - none
+    Outputs:
+        - none
+    '''
+    first_player = set()
+    first_player.add(random.choice(list(PLAYERS)))
+    return first_player
+
+
+def declare_starting_player(player):
+    '''
+    prints the first starting player (user or computer) and returns the player
+
+    Inputs:
+        - none
+    Outputs:
+        - none
+    '''
+    player = str(player)
+    player = player.strip('{}\'')
+    if player == 'computer':
+        print(f'==> The computer is the starting player.')
+    else:
+        print('==> You are the starting player.')
+
+
+def switch_turns(player):
+    '''
+    returns the next player
+
+    Inputs:
+        - current player
+    Outputs:
+        - next player
+    '''
+    return PLAYERS - player
 
 
 def main():
-    (player_positions, computer_positions) = create_fresh_game_board()
+    '''
+    the main function controls game flow
+
+    Inputs:
+        - none
+    Outputs:
+        - No return value. Prints game display and messages to console
+    '''
+
+    (player_positions, computer_positions, 
+     current_player) = create_fresh_game_board()
 
     while True:
-        player_input = get_user_input(player_positions, computer_positions)
-        player_positions.add(player_input)
-        os.system('clear')
+        if 'user' in current_player:
+            player_updates_game(player_positions, computer_positions)
 
-        print(f'==> You chose {player_input}')
-        display_board(player_positions, computer_positions)
-        if is_winner(player_positions):
-            print('==> Player won!')
-            if not is_play_again():
-                print('==> Thank you for playing.')
-                break
-            else:
-                (player_positions, computer_positions) = create_fresh_game_board()
+            if is_winner(player_positions):
+                print('==> Player won!')
+                if not is_play_again():
+                    farewell_sequence()
+                    break
+                (player_positions, computer_positions,
+                 current_player) = create_fresh_game_board()
                 continue
 
-        if is_board_full(player_positions, computer_positions):
-            print('==> It\'s a tie!')
-            if not is_play_again():
-                print('==> Thank you for playing.')
-                break
-            else:
-                (player_positions, computer_positions) = create_fresh_game_board()
+            if is_board_full(player_positions, computer_positions):
+                print('==> It\'s a tie!')
+                if not is_play_again():
+                    farewell_sequence()
+                    break
+                (player_positions, computer_positions,
+                 current_player) = create_fresh_game_board()
                 continue
 
-        computer_input = get_computer_input(player_positions, computer_positions)
-        computer_positions.add(computer_input)
-        os.system('clear')
+        if 'computer' in current_player:
+            computer_updates_game(player_positions, computer_positions)
 
-        print(f'==> Computer chose {computer_input}')
-        display_board(player_positions, computer_positions)
-        if is_winner(computer_positions):
-            print('==> Computer won!')
-            if not is_play_again():
-                print('==> Thank you for playing.')
-                break
-            else:
-                (player_positions, computer_positions) = create_fresh_game_board()
+            if is_winner(computer_positions):
+                print('==> Computer won!')
+                if not is_play_again():
+                    farewell_sequence()
+                    break
+                (player_positions, computer_positions,
+                 current_player) = create_fresh_game_board()
                 continue
 
-        if is_board_full(player_positions, computer_positions):
-            print('==> It\'s a tie!')
-            if not is_play_again():
-                print('==> Thank you for playing.')
-                break
-            else:
-                (player_positions, computer_positions) = create_fresh_game_board()
+            if is_board_full(player_positions, computer_positions):
+                print('==> It\'s a tie!')
+                if not is_play_again():
+                    farewell_sequence()
+                    break
+                (player_positions, computer_positions,
+                 current_player) = create_fresh_game_board()
                 continue
-            
+
+        current_player = switch_turns(current_player)
+
 
 main()
