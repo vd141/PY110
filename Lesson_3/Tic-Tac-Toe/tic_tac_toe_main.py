@@ -5,6 +5,9 @@ import os
 import random
 import time
 
+PLAYER_MARKER = 'o'
+COMPUTER_MARKER = 'x'
+
 ALL_VALID_POSITIONS = {'1',
                 '2', 
                 '3', 
@@ -73,7 +76,7 @@ def display_board(player_positions = None, computer_positions = None):
         computer_positions = set()
 
     board = [
-        '==> You: O, Computer: X',
+        '==> You: o, Computer: x',
         '==>  - - - ',
         '==> |1|2|3|',
         '==>  - - - ',
@@ -86,10 +89,12 @@ def display_board(player_positions = None, computer_positions = None):
     for row_index in POSITION_ROWS.values():
         for position in player_positions:
             if position in board[row_index]:
-                board[row_index] = board[row_index].replace(position, 'O')
+                board[row_index] = board[row_index].replace(position,
+                                                            PLAYER_MARKER)
         for position in computer_positions:
             if position in board[row_index]:
-                board[row_index] = board[row_index].replace(position, 'X')
+                board[row_index] = board[row_index].replace(position,
+                                                            COMPUTER_MARKER)
 
     for row in board:
         print(row)
@@ -135,7 +140,7 @@ def get_user_input(player_positions, computer_positions):
 
     while True:
         user_input = input('==> Enter an available position:'
-                           f'{sorted(ALL_VALID_POSITIONS - 
+                           f'{sorted(ALL_VALID_POSITIONS -
                                      occupied_positions)} \n').strip()
         if valid_positions(user_input, player_positions, computer_positions):
             return user_input
