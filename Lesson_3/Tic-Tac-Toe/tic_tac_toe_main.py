@@ -136,7 +136,7 @@ def get_user_input(player_positions, computer_positions):
     while True:
         user_input = input('==> Enter an available position:'
                            f'{sorted(ALL_VALID_POSITIONS - occupied_positions)} \n')
-        if valid_positions(user_input, player_positions, computer_positions):
+        if valid_positions(user_input.strip(), player_positions, computer_positions):
             return user_input
 
 
