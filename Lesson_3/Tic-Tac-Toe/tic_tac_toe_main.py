@@ -179,7 +179,7 @@ def is_winner(positions):
     return False
 
 
-def is_board_full(player_positions, computer_positions):
+def board_is_full(player_positions, computer_positions):
     '''
     returns True if player and computer occupy all positions on the board, False
     otherwise
@@ -196,7 +196,7 @@ def is_board_full(player_positions, computer_positions):
         ALL_VALID_POSITIONS)
 
 
-def is_play_again():
+def play_again():
     '''
     queries user to play again. validates user input
 
@@ -237,7 +237,7 @@ def create_fresh_game_board():
     return (player_positions, computer_positions, current_player)
 
 
-def player_updates_game(player_positions, computer_positions):
+def player_updates_board(player_positions, computer_positions):
     '''
     gets user input, updates player positions, clears console, and updates
     console
@@ -257,7 +257,8 @@ def player_updates_game(player_positions, computer_positions):
     print(f'==> You chose {player_input}')
     display_board(player_positions, computer_positions)
 
-def computer_updates_game(player_positions, computer_positions):
+
+def computer_updates_board(player_positions, computer_positions):
     '''
     gets computer choice, updates computer positions, clears console, and updates
     console
@@ -278,7 +279,7 @@ def computer_updates_game(player_positions, computer_positions):
     display_board(player_positions, computer_positions)
 
 
-def farewell_sequence():
+def execute_farewell_sequence():
     '''
     displays goodbye message for 5 secons, then clears console
     
@@ -351,42 +352,42 @@ def main():
 
     while True:
         if 'user' in current_player:
-            player_updates_game(player_positions, computer_positions)
+            player_updates_board(player_positions, computer_positions)
 
             if is_winner(player_positions):
                 print('==> Player won!')
-                if not is_play_again():
-                    farewell_sequence()
+                if not play_again():
+                    execute_farewell_sequence()
                     break
                 (player_positions, computer_positions,
                  current_player) = create_fresh_game_board()
                 continue
 
-            if is_board_full(player_positions, computer_positions):
+            if board_is_full(player_positions, computer_positions):
                 print('==> It\'s a tie!')
-                if not is_play_again():
-                    farewell_sequence()
+                if not play_again():
+                    execute_farewell_sequence()
                     break
                 (player_positions, computer_positions,
                  current_player) = create_fresh_game_board()
                 continue
 
         if 'computer' in current_player:
-            computer_updates_game(player_positions, computer_positions)
+            computer_updates_board(player_positions, computer_positions)
 
             if is_winner(computer_positions):
                 print('==> Computer won!')
-                if not is_play_again():
-                    farewell_sequence()
+                if not play_again():
+                    execute_farewell_sequence()
                     break
                 (player_positions, computer_positions,
                  current_player) = create_fresh_game_board()
                 continue
 
-            if is_board_full(player_positions, computer_positions):
+            if board_is_full(player_positions, computer_positions):
                 print('==> It\'s a tie!')
-                if not is_play_again():
-                    farewell_sequence()
+                if not play_again():
+                    execute_farewell_sequence()
                     break
                 (player_positions, computer_positions,
                  current_player) = create_fresh_game_board()
