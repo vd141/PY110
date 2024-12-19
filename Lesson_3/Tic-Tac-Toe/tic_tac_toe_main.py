@@ -138,12 +138,51 @@ def get_user_input(player_positions, computer_positions):
 
     occupied_positions = player_positions.union(computer_positions)
 
+    sorted_list = sorted(ALL_VALID_POSITIONS - occupied_positions)
+    int_sorted_list = [int(option) for option in sorted_list]
+
     while True:
         user_input = input('==> Enter an available position:'
-                           f'{sorted(ALL_VALID_POSITIONS -
-                                     occupied_positions)} \n').strip()
+                           f'{join_or(int_sorted_list)} \n').strip()
         if valid_positions(user_input, player_positions, computer_positions):
             return user_input
+
+
+def join_or(lst, primary_delimeters = ', ', last_delimeter = 'or'):
+    '''
+    takes up to 3 inputs. first input is mandatory, second and third inputs are optional.
+    original list remains intact (is not mutated)
+
+    inputs:
+        - list of numbers (not yet designed to handle nested data structures)
+        - primary delimeter
+        - last delimeter
+    output:
+        - string to print
+    '''
+    def wrapper(string):
+        '''
+        wraps the input in a prompt f-string
+        '''
+        return f'==> "{string}"'
+
+    str_lst = str(lst).strip('[]')
+
+    match len(lst):
+        case 0:
+            return wrapper("")
+        case 1:
+            return wrapper(str_lst)
+        case 2:
+            return wrapper(f'{lst[0]} or {lst[1]}')
+        case _:
+            primary_delim_inserted = str_lst.replace(', ', primary_delimeters)
+            last_elem_index = primary_delim_inserted.rfind(str(lst[-1]))
+            last_delim_inserted = wrapper(
+                            f'{primary_delim_inserted[:last_elem_index] +
+                            f'{last_delimeter} ' +
+                            str(lst[-1])}')
+            return last_delim_inserted
 
 
 def get_computer_input(player_positions, computer_positions):
