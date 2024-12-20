@@ -8,6 +8,8 @@ import time
 PLAYER_MARKER = 'o'
 COMPUTER_MARKER = 'x'
 
+WINNING_SCORE = 5
+
 ALL_VALID_POSITIONS = {'1',
                 '2', 
                 '3', 
@@ -235,7 +237,7 @@ def board_is_full(player_positions, computer_positions):
         ALL_VALID_POSITIONS)
 
 
-def play_again():
+def play_another_round():
     '''
     queries user to play again. validates user input
 
@@ -246,7 +248,7 @@ def play_again():
     '''
 
     while True:
-        player_input = input('==> Would you like to play again? y/n\n')
+        player_input = input('==> Would you like to play another round? y/n\n')
         if player_input in ['y', 'yes', 'n', 'no']:
             if player_input in ['y', 'yes']:
                 return True
@@ -376,6 +378,90 @@ def switch_turns(player):
     return PLAYERS - player
 
 
+def initialize_scores():
+    '''
+    initialize dict containing player and computer scores
+
+    Inputs:
+        - none
+    Outputs:
+        - score dict
+    '''
+    return {
+        'user': 0,
+        'computer': 0,
+    }
+
+
+def tally_score(scores, current_player):
+    '''
+    updates computer/player score when invoked
+
+    Inputs:
+        - scores dict
+        - current player set e.g. {'user'}
+    Outputs:
+        - scores dict
+    '''
+    if 'computer' in current_player:
+        scores['computer'] += 1
+    if 'user' in current_player:
+        scores['user'] += 1
+    
+    return scores
+
+
+def display_score(scores):
+    '''
+    displays the current score
+
+    Inputs:
+        - scores dict
+    Outputs:
+        - displays scores to console, returns None
+    '''
+    print(f'==> Score: Computer - {scores['computer']} , '
+          f'Player - {scores['user']}')
+
+
+def match_winner(scores):
+    '''
+    prints winning message
+
+    Inputs:
+        - scores dict
+    Outputs:
+        - prints message to console, returns boolean
+    '''
+    if (scores['user'] is WINNING_SCORE):
+        print('==> You have won the match!')
+        return True
+    elif (scores['computer'] is WINNING_SCORE):
+        print('==> The computer has won the match!')
+        return True
+    return False
+
+
+def play_another_match():
+    '''
+    queries user to play again. validates user input
+
+    Input:
+        - none
+    Output:
+        - boolean
+    '''
+
+    while True:
+        player_input = input('==> Would you like to play another match? y/n\n')
+        if player_input in ['y', 'yes', 'n', 'no']:
+            if player_input in ['y', 'yes']:
+                return True
+            if player_input in ['n', 'no']:
+                return False
+        print('==> Please enter y or n.')
+
+
 def main():
     '''
     the main function controls game flow
@@ -388,14 +474,25 @@ def main():
 
     (player_positions, computer_positions,
      current_player) = create_fresh_game_board()
+    
+    scores = initialize_scores()
 
     while True:
         if 'user' in current_player:
             player_updates_board(player_positions, computer_positions)
-
             if is_winner(player_positions):
                 print('==> Player won!')
-                if not play_again():
+                scores = tally_score(scores, current_player)
+                display_score(scores)
+                if match_winner(scores):
+                    if play_another_match():
+                        (player_positions, computer_positions,
+                        current_player) = create_fresh_game_board()
+                        scores = initialize_scores()
+                        continue
+                    execute_farewell_sequence()
+                    break
+                if not play_another_round():
                     execute_farewell_sequence()
                     break
                 (player_positions, computer_positions,
@@ -404,7 +501,8 @@ def main():
 
             if board_is_full(player_positions, computer_positions):
                 print('==> It\'s a tie!')
-                if not play_again():
+                display_score(scores)
+                if not play_another_round():
                     execute_farewell_sequence()
                     break
                 (player_positions, computer_positions,
@@ -413,10 +511,19 @@ def main():
 
         if 'computer' in current_player:
             computer_updates_board(player_positions, computer_positions)
-
             if is_winner(computer_positions):
                 print('==> Computer won!')
-                if not play_again():
+                scores = tally_score(scores, current_player)
+                display_score(scores)
+                if match_winner(scores):
+                    if play_another_match():
+                        (player_positions, computer_positions,
+                        current_player) = create_fresh_game_board()
+                        scores = initialize_scores()
+                        continue
+                    execute_farewell_sequence()
+                    break
+                if not play_another_round():
                     execute_farewell_sequence()
                     break
                 (player_positions, computer_positions,
@@ -425,7 +532,8 @@ def main():
 
             if board_is_full(player_positions, computer_positions):
                 print('==> It\'s a tie!')
-                if not play_again():
+                display_score(scores)
+                if not play_another_round():
                     execute_farewell_sequence()
                     break
                 (player_positions, computer_positions,
