@@ -187,7 +187,7 @@ def join_or(lst, primary_delimeters = ', ', last_delimeter = 'or'):
             return last_delim_inserted
 
 
-def get_computer_input(player_positions, computer_positions):
+def get_computer_input_random(player_positions, computer_positions):
     '''
     computer randomly selects an available position
 
@@ -249,7 +249,7 @@ def play_another_round():
 
     while True:
         player_input = input('==> Would you like to play another round? y/n\n')
-        if player_input in ['y', 'yes', 'n', 'no']:
+        if player_input in ['y', 'yes', 'Y', 'n', 'no', 'N']:
             if player_input in ['y', 'yes']:
                 return True
             if player_input in ['n', 'no']:
@@ -303,7 +303,8 @@ def player_updates_board(player_positions, computer_positions):
 def computer_updates_board(player_positions, computer_positions):
     '''
     gets computer choice, updates computer positions, clears console, and updates
-    console
+    console. if player is about to win, computer chooses remaining position.
+    otherwise, computer randomly selects available position
 
     side effects: mutates computer positions
 
@@ -328,7 +329,7 @@ def computer_updates_board(player_positions, computer_positions):
             break
 
     if not player_about_to_win:
-        computer_input = get_computer_input(player_positions, computer_positions)
+        computer_input = get_computer_input_random(player_positions, computer_positions)
         computer_positions.add(computer_input)
     
     os.system('clear')
