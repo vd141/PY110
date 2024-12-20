@@ -194,7 +194,7 @@ def get_computer_input(player_positions, computer_positions):
     Inputs: player_positions (set of player-occupied positions),
             computer_positions (set of computer-occupied positions)
 
-    Outputs: computer-selected position
+    Outputs: computer-selected position (string)
     '''
 
     print('==> Computer is choosing...')
@@ -297,6 +297,7 @@ def player_updates_board(player_positions, computer_positions):
     os.system('clear')
     print(f'==> You chose {player_input}')
     display_board(player_positions, computer_positions)
+    return (player_positions, computer_positions)
 
 
 def computer_updates_board(player_positions, computer_positions):
@@ -313,11 +314,27 @@ def computer_updates_board(player_positions, computer_positions):
         - None
     '''
 
-    computer_input = get_computer_input(player_positions, computer_positions)
-    computer_positions.add(computer_input)
+    player_about_to_win = False
+
+    for combo in WINNING_POSITION_COMBOS:
+        remaining_position = combo - player_positions
+        player_about_to_win = ((len(player_positions.intersection(combo)) == 2)
+                               and computer_positions.isdisjoint(remaining_position))
+        if player_about_to_win:
+            print('==> Computer is choosing...')
+            time.sleep(5)
+            computer_input = combo.difference(player_positions)
+            computer_positions.update(computer_input)
+            break
+
+    if not player_about_to_win:
+        computer_input = get_computer_input(player_positions, computer_positions)
+        computer_positions.add(computer_input)
+    
     os.system('clear')
     print(f'==> Computer chose {computer_input}')
     display_board(player_positions, computer_positions)
+    return (player_positions, computer_positions)
 
 
 def execute_farewell_sequence():
