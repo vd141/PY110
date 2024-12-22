@@ -314,21 +314,48 @@ def computer_updates_board(player_positions, computer_positions):
     Outputs:
         - None
     '''
-
-    player_about_to_win = False
+    # offensive strategy
+    computer_about_to_win = False
 
     for combo in WINNING_POSITION_COMBOS:
-        remaining_position = combo - player_positions
-        player_about_to_win = ((len(player_positions.intersection(combo)) == 2)
-                               and computer_positions.isdisjoint(remaining_position))
-        if player_about_to_win:
+        remaining_position = combo - computer_positions
+        computer_about_to_win = ((len(computer_positions.intersection(combo)) == 2)
+                               and player_positions.isdisjoint(remaining_position))
+        if computer_about_to_win:
             print('==> Computer is choosing...')
             time.sleep(5)
-            computer_input = combo.difference(player_positions)
+            computer_input = combo.difference(computer_positions)
             computer_positions.update(computer_input)
             break
 
-    if not player_about_to_win:
+    # defensive strategy
+    player_about_to_win = False
+
+    if not computer_about_to_win:
+        for combo in WINNING_POSITION_COMBOS:
+            remaining_position = combo - player_positions
+            player_about_to_win = ((len(player_positions.intersection(combo)) == 2)
+                                and computer_positions.isdisjoint(remaining_position))
+            if player_about_to_win:
+                print('==> Computer is choosing...')
+                time.sleep(5)
+                computer_input = combo.difference(player_positions)
+                computer_positions.update(computer_input)
+                break
+    
+    # pick spot #5 if available
+    spot_five_picked = False
+    if '5' not in player_positions.union(computer_positions):
+        if (not player_about_to_win) and (not computer_about_to_win):
+            print('==> Computer is choosing...')
+            time.sleep(5)
+            computer_input = '5'
+            computer_positions.update(computer_input)
+            spot_five_picked = True
+
+    # random selection
+    if ((not player_about_to_win) and (not computer_about_to_win) and 
+        (not spot_five_picked)):
         computer_input = get_computer_input_random(player_positions, computer_positions)
         computer_positions.add(computer_input)
     
