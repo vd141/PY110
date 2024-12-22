@@ -204,7 +204,7 @@ def get_computer_input_random(player_positions, computer_positions):
     return random.choice(list(ALL_VALID_POSITIONS - occupied_positions))
 
 
-def is_winner(positions):
+def is_winner(player_positions, computer_positions, current_player):
     '''
     given a set of positions (computer or player), returns True if the input
     occupies a winning position
@@ -215,8 +215,17 @@ def is_winner(positions):
         - boolean
     '''
 
+    if 'user' in current_player:
+        positions = player_positions
+    else:
+        positions = computer_positions
+
     for combo in WINNING_POSITION_COMBOS:
         if positions.intersection(combo) in WINNING_POSITION_COMBOS:
+            if 'user' in current_player:
+                print('==> Player won!')
+            if 'computer' in current_player:
+                print('==> Computer won!')
             return True
     return False
 
@@ -323,7 +332,7 @@ def computer_offensive_strategy(player_positions, computer_positions):
             computer_input = combo.difference(computer_positions)
             computer_positions.update(computer_input)
             break
-    
+
     return computer_about_to_win
 
 
@@ -371,13 +380,18 @@ def computer_picks_spot_five(player_positions, computer_positions):
         computer_input = '5'
         computer_positions.update(computer_input)
         spot_five_picked = True
-    
+
     return spot_five_picked
 
 
 def computer_selects_randomly(player_positions, computer_positions):
     '''
-    
+    computer selects randomly from available positions
+
+    Inputs:
+        - player_positions, computer_positions
+    Outputs:
+        - none
     '''
     # random selection
     computer_input = get_computer_input_random(player_positions, computer_positions)
@@ -409,7 +423,7 @@ def computer_updates_board(player_positions, computer_positions):
         pass
     else:
         computer_selects_randomly(player_positions, computer_positions)
-    
+
 
     computer_input = str(computer_positions - before_computer_moves).strip('{}\'')
 
@@ -506,7 +520,7 @@ def tally_score(scores, current_player):
         scores['computer'] += 1
     if 'user' in current_player:
         scores['user'] += 1
-    
+
     return scores
 
 
@@ -532,10 +546,10 @@ def match_winner(scores):
     Outputs:
         - prints message to console, returns boolean
     '''
-    if (scores['user'] is WINNING_SCORE):
+    if scores['user'] is WINNING_SCORE:
         print('==> You have won the match!')
         return True
-    elif (scores['computer'] is WINNING_SCORE):
+    if scores['computer'] is WINNING_SCORE:
         print('==> The computer has won the match!')
         return True
     return False
@@ -573,73 +587,43 @@ def main():
 
     (player_positions, computer_positions,
      current_player) = create_fresh_game_board()
-    
+
     scores = initialize_scores()
 
     while True:
         if 'user' in current_player:
             player_updates_board(player_positions, computer_positions)
-            if is_winner(player_positions):
-                print('==> Player won!')
-                scores = tally_score(scores, current_player)
-                display_score(scores)
-                if match_winner(scores):
-                    if play_another_match():
-                        (player_positions, computer_positions,
-                        current_player) = create_fresh_game_board()
-                        scores = initialize_scores()
-                        continue
-                    execute_farewell_sequence()
-                    break
-                if not play_another_round():
-                    execute_farewell_sequence()
-                    break
-                (player_positions, computer_positions,
-                 current_player) = create_fresh_game_board()
-                continue
-
-            if board_is_full(player_positions, computer_positions):
-                print('==> It\'s a tie!')
-                display_score(scores)
-                if not play_another_round():
-                    execute_farewell_sequence()
-                    break
-                (player_positions, computer_positions,
-                 current_player) = create_fresh_game_board()
-                continue
-
-        if 'computer' in current_player:
+        else:
             computer_updates_board(player_positions, computer_positions)
-            if is_winner(computer_positions):
-                print('==> Computer won!')
-                scores = tally_score(scores, current_player)
-                display_score(scores)
-                if match_winner(scores):
-                    if play_another_match():
-                        (player_positions, computer_positions,
-                        current_player) = create_fresh_game_board()
-                        scores = initialize_scores()
-                        continue
-                    execute_farewell_sequence()
-                    break
-                if not play_another_round():
-                    execute_farewell_sequence()
-                    break
-                (player_positions, computer_positions,
-                 current_player) = create_fresh_game_board()
-                continue
 
-            if board_is_full(player_positions, computer_positions):
-                print('==> It\'s a tie!')
-                display_score(scores)
-                if not play_another_round():
-                    execute_farewell_sequence()
-                    break
-                (player_positions, computer_positions,
-                 current_player) = create_fresh_game_board()
-                continue
+        if is_winner(player_positions, computer_positions, current_player):
+            scores = tally_score(scores, current_player)
+            display_score(scores)
+            if match_winner(scores):
+                if play_another_match():
+                    (player_positions, computer_positions,
+                    current_player) = create_fresh_game_board()
+                    scores = initialize_scores()
+                    continue
+                break
+            if not play_another_round():
+                break
+            (player_positions, computer_positions,
+                current_player) = create_fresh_game_board()
+            continue
+
+        if board_is_full(player_positions, computer_positions):
+            print('==> It\'s a tie!')
+            display_score(scores)
+            if not play_another_round():
+                break
+            (player_positions, computer_positions,
+                current_player) = create_fresh_game_board()
+            continue
 
         current_player = switch_turns(current_player)
+
+    execute_farewell_sequence()
 
 
 main()
