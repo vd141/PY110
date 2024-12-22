@@ -4,6 +4,7 @@ Tic-tac-toe
 import os
 import random
 import time
+import copy
 
 PLAYER_MARKER = 'o'
 COMPUTER_MARKER = 'x'
@@ -300,19 +301,14 @@ def player_updates_board(player_positions, computer_positions):
     return (player_positions, computer_positions)
 
 
-def computer_updates_board(player_positions, computer_positions):
+def computer_offensive_strategy(player_positions, computer_positions):
     '''
-    gets computer choice, updates computer positions, clears console, and updates
-    console. if player is about to win, computer chooses remaining position.
-    otherwise, computer randomly selects available position
-
-    side effects: mutates computer positions
+    computer chooses the remaining position if it is one position away from winning
 
     Inputs:
-        - player_positions (set of player-occupied positions),
-            computer_positions (set of computer-occupied positions)
+        - player positions, computer positions
     Outputs:
-        - None
+        - True if computer is about to win
     '''
     # offensive strategy
     computer_about_to_win = False
@@ -327,38 +323,96 @@ def computer_updates_board(player_positions, computer_positions):
             computer_input = combo.difference(computer_positions)
             computer_positions.update(computer_input)
             break
+    
+    return computer_about_to_win
 
+
+def computer_defensive_strategy(player_positions, computer_positions):
+    '''
+        computer chooses the remaining position if player is one position away
+        from winning
+
+    Inputs:
+        - player positions, computer positions
+    Outputs:
+        - True if player is about to win
+    '''
     # defensive strategy
     player_about_to_win = False
 
-    if not computer_about_to_win:
-        for combo in WINNING_POSITION_COMBOS:
-            remaining_position = combo - player_positions
-            player_about_to_win = ((len(player_positions.intersection(combo)) == 2)
-                                and computer_positions.isdisjoint(remaining_position))
-            if player_about_to_win:
-                print('==> Computer is choosing...')
-                time.sleep(5)
-                computer_input = combo.difference(player_positions)
-                computer_positions.update(computer_input)
-                break
-    
+    for combo in WINNING_POSITION_COMBOS:
+        remaining_position = combo - player_positions
+        player_about_to_win = ((len(player_positions.intersection(combo)) == 2)
+                            and computer_positions.isdisjoint(remaining_position))
+        if player_about_to_win:
+            print('==> Computer is choosing...')
+            time.sleep(5)
+            computer_input = combo.difference(player_positions)
+            computer_positions.update(computer_input)
+            break
+
+    return player_about_to_win
+
+
+def computer_picks_spot_five(player_positions, computer_positions):
+    '''
+        computer chooses the five position if it is empty
+
+    Inputs:
+        - player positions, computer positions
+    Outputs:
+        - True if picks position five
+    '''
     # pick spot #5 if available
     spot_five_picked = False
     if '5' not in player_positions.union(computer_positions):
-        if (not player_about_to_win) and (not computer_about_to_win):
-            print('==> Computer is choosing...')
-            time.sleep(5)
-            computer_input = '5'
-            computer_positions.update(computer_input)
-            spot_five_picked = True
-
-    # random selection
-    if ((not player_about_to_win) and (not computer_about_to_win) and 
-        (not spot_five_picked)):
-        computer_input = get_computer_input_random(player_positions, computer_positions)
-        computer_positions.add(computer_input)
+        print('==> Computer is choosing...')
+        time.sleep(5)
+        computer_input = '5'
+        computer_positions.update(computer_input)
+        spot_five_picked = True
     
+    return spot_five_picked
+
+
+def computer_selects_randomly(player_positions, computer_positions):
+    '''
+    
+    '''
+    # random selection
+    computer_input = get_computer_input_random(player_positions, computer_positions)
+    computer_positions.add(computer_input)
+
+
+def computer_updates_board(player_positions, computer_positions):
+    '''
+    gets computer choice, updates computer positions, clears console, and updates
+    console. if player is about to win, computer chooses remaining position.
+    otherwise, computer randomly selects available position
+
+    side effects: mutates computer positions
+
+    Inputs:
+        - player_positions (set of player-occupied positions),
+            computer_positions (set of computer-occupied positions)
+    Outputs:
+        - None
+    '''
+
+    before_computer_moves = copy.copy(computer_positions)
+
+    if computer_offensive_strategy(player_positions, computer_positions):
+        pass
+    elif computer_defensive_strategy(player_positions, computer_positions):
+        pass
+    elif computer_picks_spot_five(player_positions, computer_positions):
+        pass
+    else:
+        computer_selects_randomly(player_positions, computer_positions)
+    
+
+    computer_input = str(computer_positions - before_computer_moves).strip('{}\'')
+
     os.system('clear')
     print(f'==> Computer chose {computer_input}')
     display_board(player_positions, computer_positions)
