@@ -387,8 +387,8 @@ def computer_selects_randomly(player_positions, computer_positions):
 def computer_updates_board(player_positions, computer_positions):
     '''
     gets computer choice, updates computer positions, clears console, and updates
-    console. if player is about to win, computer chooses remaining position.
-    otherwise, computer randomly selects available position
+    console. computer prioritizes (in descending order) an offensive strategy, a
+    defensive strategy, picking an empty spot 5, and a random selection strategy
 
     side effects: mutates computer positions
 
