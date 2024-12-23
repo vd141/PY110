@@ -9,6 +9,8 @@ import copy
 PLAYER_MARKER = 'o'
 COMPUTER_MARKER = 'x'
 
+COMPUTER_THINK_TIME = 1
+
 WINNING_SCORE = 5
 
 ALL_VALID_POSITIONS = {'1',
@@ -23,7 +25,7 @@ ALL_VALID_POSITIONS = {'1',
                 }
 
 
-WINNING_POSITION_COMBOS = [
+WINNING_POSITION_COMBOS = (
     {'1', '2', '3',},
     {'1', '5', '9',},
     {'1', '4', '7',},
@@ -32,7 +34,7 @@ WINNING_POSITION_COMBOS = [
     {'3', '5', '7',},
     {'4', '5', '6',},
     {'7', '8', '9',},
-]
+)
 
 
 POSITION_ROWS = {
@@ -153,8 +155,8 @@ def get_user_input(player_positions, computer_positions):
 
 def join_or(lst, primary_delimeters = ', ', last_delimeter = 'or'):
     '''
-    takes up to 3 inputs. first input is mandatory, second and third inputs are optional.
-    original list remains intact (is not mutated)
+    takes up to 3 inputs. first input is mandatory, second and third inputs are
+    optional. original list remains intact (is not mutated)
 
     inputs:
         - list of numbers (not yet designed to handle nested data structures)
@@ -199,7 +201,7 @@ def get_computer_input_random(player_positions, computer_positions):
     '''
 
     print('==> Computer is choosing...')
-    time.sleep(5)
+    time.sleep(COMPUTER_THINK_TIME)
     occupied_positions = player_positions.union(computer_positions)
     return random.choice(list(ALL_VALID_POSITIONS - occupied_positions))
 
@@ -312,7 +314,8 @@ def player_updates_board(player_positions, computer_positions):
 
 def computer_offensive_strategy(player_positions, computer_positions):
     '''
-    computer chooses the remaining position if it is one position away from winning
+    computer chooses the remaining position if it is one position away from
+    winning
 
     Inputs:
         - player positions, computer positions
@@ -324,11 +327,12 @@ def computer_offensive_strategy(player_positions, computer_positions):
 
     for combo in WINNING_POSITION_COMBOS:
         remaining_position = combo - computer_positions
-        computer_about_to_win = ((len(computer_positions.intersection(combo)) == 2)
-                               and player_positions.isdisjoint(remaining_position))
+        computer_about_to_win = ((len(computer_positions.intersection(combo))
+                                  == 2)and
+                                player_positions.isdisjoint(remaining_position))
         if computer_about_to_win:
             print('==> Computer is choosing...')
-            time.sleep(5)
+            time.sleep(COMPUTER_THINK_TIME)
             computer_input = combo.difference(computer_positions)
             computer_positions.update(computer_input)
             break
@@ -352,10 +356,11 @@ def computer_defensive_strategy(player_positions, computer_positions):
     for combo in WINNING_POSITION_COMBOS:
         remaining_position = combo - player_positions
         player_about_to_win = ((len(player_positions.intersection(combo)) == 2)
-                            and computer_positions.isdisjoint(remaining_position))
+                            and
+                            computer_positions.isdisjoint(remaining_position))
         if player_about_to_win:
             print('==> Computer is choosing...')
-            time.sleep(5)
+            time.sleep(COMPUTER_THINK_TIME)
             computer_input = combo.difference(player_positions)
             computer_positions.update(computer_input)
             break
@@ -376,7 +381,7 @@ def computer_picks_spot_five(player_positions, computer_positions):
     spot_five_picked = False
     if '5' not in player_positions.union(computer_positions):
         print('==> Computer is choosing...')
-        time.sleep(5)
+        time.sleep(COMPUTER_THINK_TIME)
         computer_input = '5'
         computer_positions.update(computer_input)
         spot_five_picked = True
@@ -394,13 +399,14 @@ def computer_selects_randomly(player_positions, computer_positions):
         - none
     '''
     # random selection
-    computer_input = get_computer_input_random(player_positions, computer_positions)
+    computer_input = get_computer_input_random(player_positions,
+                                               computer_positions)
     computer_positions.add(computer_input)
 
 
 def computer_updates_board(player_positions, computer_positions):
     '''
-    gets computer choice, updates computer positions, clears console, and updates
+    get computer choice, update computer positions, clears console, and update
     console. computer prioritizes (in descending order) an offensive strategy, a
     defensive strategy, picking an empty spot 5, and a random selection strategy
 
@@ -415,17 +421,22 @@ def computer_updates_board(player_positions, computer_positions):
 
     before_computer_moves = copy.copy(computer_positions)
 
-    if computer_offensive_strategy(player_positions, computer_positions):
-        pass
-    elif computer_defensive_strategy(player_positions, computer_positions):
-        pass
-    elif computer_picks_spot_five(player_positions, computer_positions):
-        pass
-    else:
+    computer_has_moved = False
+
+    if not computer_has_moved:
+        computer_has_moved = (
+            computer_offensive_strategy(player_positions, computer_positions))
+    if not computer_has_moved:
+        computer_has_moved = (
+            computer_defensive_strategy(player_positions, computer_positions))
+    if not computer_has_moved:
+        computer_has_moved = (
+            computer_picks_spot_five(player_positions, computer_positions))
+    if not computer_has_moved:
         computer_selects_randomly(player_positions, computer_positions)
 
-
-    computer_input = str(computer_positions - before_computer_moves).strip('{}\'')
+    computer_input = str(computer_positions -
+                         before_computer_moves).strip('{}\'')
 
     os.system('clear')
     print(f'==> Computer chose {computer_input}')
@@ -567,10 +578,10 @@ def play_another_match():
 
     while True:
         player_input = input('==> Would you like to play another match? y/n\n')
-        if player_input in ['y', 'yes', 'n', 'no']:
-            if player_input in ['y', 'yes']:
+        if player_input in ['y', 'Y', 'yes', 'n', 'N,', 'no']:
+            if player_input in ['y', 'Y', 'yes']:
                 return True
-            if player_input in ['n', 'no']:
+            if player_input in ['n', 'N', 'no']:
                 return False
         print('==> Please enter y or n.')
 
