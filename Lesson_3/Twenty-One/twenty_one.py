@@ -29,7 +29,8 @@ Requirements:
 
     Data structures:
         - set of cards
-            - keys are strings, values are values. value of ace will be list [1, 11]
+            - keys are strings, values are values. value of ace will be list [1,
+              11]
         - cards in player hand
             - key:value pairs
         - cards in computer hand
@@ -53,7 +54,8 @@ import time
 
 def initialize_card_deck():
     '''
-    Initializes a dict of 52 cards. Keys are card names and values are card values.
+    Initializes a dict of 52 cards. Keys are card names and values are card
+    values.
     Aces have two values (1, 11) stored in a list
 
     Inputs:
@@ -117,11 +119,11 @@ def evaluate_hand_total(hand):
 
     if the sum is below 21, the function can test the ace values
 
-    in a hand of at least one ace, only one can be 11 with the possibility of the
-    total sum being under 21
+    in a hand of at least one ace, only one can be 11 with the possibility of 
+    the total sum being under 21
 
-    so if one of the aces takes on the value of 11 and the total sum remains under
-    21, we can return that sum
+    so if one of the aces takes on the value of 11 and the total sum remains
+    under 21, we can return that sum
 
     otherwise, the total sum will be the number of aces + the running total of
     all other cards
@@ -178,8 +180,8 @@ def display_dealer_initial_hand(hand):
 
 def join_and(lst, primary_delimeters = ', ', last_delimeter = 'and'):
     '''
-    takes up to 3 inputs. first input is mandatory, second and third inputs are optional.
-    original list remains intact (is not mutated)
+    takes up to 3 inputs. first input is mandatory, second and third inputs are
+    optional. original list remains intact (is not mutated)
 
     inputs:
         - list of numbers (not yet designed to handle nested data structures)
@@ -243,8 +245,8 @@ def player_choice(player_hand, deck):
 
 def dealer_strategy(dealer_hand, deck):
     '''
-    if the computer's total hand value is less than 17, it hits. if it is greater,
-    it stays
+    if the computer's total hand value is less than 17, it hits. if it is
+    greater, it stays
 
     Input:
         - dealer hand, deck
