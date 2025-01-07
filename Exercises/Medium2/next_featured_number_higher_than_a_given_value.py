@@ -1,19 +1,19 @@
+MAX_FEATURED = 9876543201
+
 def next_featured(num):
     '''
     takes a number as an argument and returns the next featured number greater
     than the integer. issues an error message if there is no next featured number
-
-
     '''
 
-    mult_seven = 7
+    featured_num = num + 1
 
-    while not (is_valid(mult_seven) and mult_seven > num):
-        mult_seven += 7
-        if mult_seven > 9876543201:
+    while not is_valid(featured_num):
+        featured_num += 1
+        if featured_num > MAX_FEATURED:
             return "There is no possible number that fulfills those requirements."
 
-    return mult_seven
+    return featured_num
 
 def is_valid(number):
     '''
