@@ -1,3 +1,5 @@
+import re
+
 def word_to_digit(message):
     '''
     takes a string as an argument and returns that string with every occurrence
@@ -9,6 +11,11 @@ def word_to_digit(message):
     '''
 
     # split_message = message.split()
+
+    # # to use regexp, use the re.split() method to split words by string.puncutation
+    # # and spaces
+    # split_message = re.split(r'[ ,.]+', message)
+    # print(split_message)
 
     # for idx, word in enumerate(split_message):
     #     match word:
@@ -45,6 +52,7 @@ def word_to_digit(message):
     message = message.replace('nine', '9')
 
     return message
+
 
 message = 'Please call me at five five five one two three four'
 print(word_to_digit(message) == "Please call me at 5 5 5 1 2 3 4")
