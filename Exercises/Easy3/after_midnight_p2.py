@@ -9,18 +9,28 @@ def after_midnight(time_):
 
     minutes_after_midnight = (hours * MINUTES_IN_AN_HOUR) + minutes
 
-    while minutes_after_midnight > MINUTES_IN_A_DAY:
+    while minutes_after_midnight >= MINUTES_IN_A_DAY:
         minutes_after_midnight -= MINUTES_IN_A_DAY
     
     return minutes_after_midnight
 
 def before_midnight(time_):
+    '''
+    given a time, calculate the number of minutes before midnight that time is
+
+    calculate the minutes after midnight the time is, then subtract that number
+    from the number of minutes in a day to get the number of minutes before
+    midnight
+    '''
     time_split = time_.split(':')
     hours = int(time_split[0])
     minutes = int(time_split[1])
     
-    minutes_before_midnight = MINUTES_IN_A_DAY - (hours * MINUTES_IN_AN_HOUR)
-    + minutes
+    minutes_before_midnight = (MINUTES_IN_A_DAY - (hours * MINUTES_IN_AN_HOUR)
+    - minutes)
+
+    while minutes_before_midnight >= MINUTES_IN_A_DAY:
+        minutes_before_midnight -= MINUTES_IN_A_DAY
 
     return minutes_before_midnight
 
