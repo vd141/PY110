@@ -37,13 +37,12 @@ def merge(list1, list2):
             merged.extend(list2[list2_idx:])
             break
         if list2_idx >= len(list2):
-            merged.extend(list1[list2_idx:])
+            merged.extend(list1[list1_idx:])
             break
 
     return merged
 
 # All of these examples should print True
-print(merge([1, 5, 9], [2, 6, 8]))
 print(merge([1, 5, 9], [2, 6, 8]) == [1, 2, 5, 6, 8, 9])
 print(merge([1, 1, 3], [2, 2]) == [1, 1, 2, 2, 3])
 print(merge([], [1, 4, 5]) == [1, 4, 5])
