@@ -27,13 +27,15 @@ def next_featured(num):
 
     candidate = num + 1
 
-    while candidate < LARGEST_FEATURE:
+    while candidate <= LARGEST_FEATURE:
         if candidate % 7 == 0:
             if candidate % 2 != 0:
                 if len(str(candidate)) == len(set(str(candidate))):
                     return candidate
                 candidate += 14
+                continue
             candidate += 7
+            continue
         candidate += 1
     
     return "There is no possible number that fulfills those requirements."
