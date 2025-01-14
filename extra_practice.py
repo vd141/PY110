@@ -247,3 +247,8 @@ print(new_dict == [{'a': 2}, {'b': 3, 'c': 4}, {'d': 5, 'e': 6, 'f': 7}])
 all_substrings.py problem from Easy4
 palindromic_substrings.py problem from Easy4
 '''
+
+'''
+mutable default arguments from Debugging
+set modifications from Debugging
+'''
