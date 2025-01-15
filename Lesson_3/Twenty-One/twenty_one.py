@@ -1,7 +1,8 @@
 '''
 Requirements:
     - standard 52 card deck with 4 suits
-    - objective of the game is to get as close to 21 as possible without going over
+    - objective of the game is to get as close to 21 as possible without going
+      over
     - dealer and a player are the opponents
     - each opponent is initially dealt a hand of two cards
     - numbered cards are worth their face value
@@ -47,11 +48,13 @@ Requirements:
         - stay function - get/validate input and pass turn to next player
         - 
 '''
-
 import random
 import copy
 import time
 import os
+
+DEALER_HIT_LIMIT = 17
+BUST_LIMIT = 21
 
 def initialize_card_deck():
     '''
@@ -146,9 +149,7 @@ def evaluate_hand_total(hand):
 
     if num_aces == 0:
         return running_total
-    if num_aces + running_total >= 21:
-        return num_aces + running_total
-    if 11 + (num_aces - 1) + running_total <= 21:
+    if 11 + (num_aces - 1) + running_total <= BUST_LIMIT:
         return 11 + (num_aces - 1) + running_total
     return num_aces + running_total
 
@@ -163,8 +164,7 @@ def is_bust(hand):
         - boolean True if bust, False otherwise
     '''
 
-    if evaluate_hand_total(hand) > 21:
-        print('==> It\'s a bust!')
+    if evaluate_hand_total(hand) > BUST_LIMIT:
         return True
     return False
 
@@ -262,7 +262,7 @@ def dealer_strategy(dealer_hand, deck):
     time.sleep(1)
     print('==> Dealer\'s turn...')
     time.sleep(2)
-    if evaluate_hand_total(dealer_hand) < 17:
+    if evaluate_hand_total(dealer_hand) < DEALER_HIT_LIMIT:
         new_card = deal_card(deck)
         dealer_hand.update(new_card)
         card = list(new_card.keys())[0]
@@ -272,38 +272,55 @@ def dealer_strategy(dealer_hand, deck):
     time.sleep(2)
     return dealer_hand
 
-def main():
+
+def player_turn(player_hand, deck):
     '''
-    game flow
+    displays player hand, allows player to make a H or S choice,
+    determines if there is a bust
+
+    returns player hand and dealer_win status
     '''
-    os.system('clear')
-    deck = initialize_card_deck()
-    player_hand, dealer_hand = initialize_hands(deck)
-    display_dealer_initial_hand(dealer_hand)
+
     dealer_wins = False
     while True:
         display_player_hand(player_hand, 'You have')
         prev_player_hand = copy.copy(player_hand)
         player_hand = player_choice(player_hand, deck)
-        total_player_hand = evaluate_hand_total(player_hand)
-        if total_player_hand > 21:
+        if is_bust(player_hand):
             display_player_hand(player_hand, 'You have')
             print('==> Player busts, dealer wins!')
             dealer_wins = True
             break
         if prev_player_hand == player_hand:
             break
+
+    return dealer_wins, player_hand
+
+
+def computer_turn(dealer_hand, deck, dealer_wins):
+    '''
+    executes dealer strategy if dealer has not won (bc of player bust)
+    determines if dealer busted
+    '''
+
     player_wins = False
     while not dealer_wins:
         prev_dealer_hand = copy.copy(dealer_hand)
         dealer_hand = dealer_strategy(dealer_hand, deck)
-        total_dealer_hand = evaluate_hand_total(dealer_hand)
-        if total_dealer_hand > 21:
+        if is_bust(dealer_hand):
             print('==> Dealer busts, player wins!')
             player_wins = True
             break
         if prev_dealer_hand == dealer_hand:
             break
+
+    return player_wins, dealer_hand
+
+
+def display_game_results(player_hand, dealer_hand, player_wins, dealer_wins):
+    '''
+    calculates game results and determines winner
+    '''
     total_player_hand = evaluate_hand_total(player_hand)
     total_dealer_hand = evaluate_hand_total(dealer_hand)
     print(f'==> Your final hand is: {join_and(list(player_hand.keys()))}. '
@@ -320,6 +337,22 @@ def main():
             print('==> Dealer wins!')
         else:
             print('==> It\'s a tie!')
+
+
+def main():
+    '''
+    game flow
+    '''
+
+    os.system('clear')
+    deck = initialize_card_deck()
+    player_hand, dealer_hand = initialize_hands(deck)
+    display_dealer_initial_hand(dealer_hand)
+
+    dealer_wins, player_hand = player_turn(player_hand, deck)
+    player_wins, dealer_hand = computer_turn(dealer_hand, deck, dealer_wins)
+
+    display_game_results(player_hand, dealer_hand, player_wins, dealer_wins)
 
 
 main()
