@@ -51,12 +51,13 @@ Requirements:
 import random
 import copy
 import time
+import os
 
 def initialize_card_deck():
     '''
     Initializes a dict of 52 cards. Keys are card names and values are card
     values.
-    Aces have two values (1, 11) stored in a list
+    Aces have have a value of 'Ace'
 
     Inputs:
         - none
@@ -211,12 +212,13 @@ def join_and(lst, primary_delimeters = ', ', last_delimeter = 'and'):
 
 def display_player_hand(hand, message):
     '''
-    displays all cards in the player's hand
+    displays all cards in the player's hand and hand's total value
     '''
 
     full_hand = list(hand.values())
     string_to_insert = join_and(full_hand)
-    print(f'==> {message}: {string_to_insert}')
+    hand_total = evaluate_hand_total(hand)
+    print(f'==> {message}: {string_to_insert}, totaling {hand_total}.')
 
 
 def player_choice(player_hand, deck):
@@ -268,6 +270,7 @@ def main():
     '''
     game flow
     '''
+    os.system('clear')
     deck = initialize_card_deck()
     player_hand, dealer_hand = initialize_hands(deck)
     display_dealer_initial_hand(dealer_hand)
