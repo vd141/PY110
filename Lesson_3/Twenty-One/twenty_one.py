@@ -65,7 +65,11 @@ def initialize_card_deck():
         - dict of 52 cards
     '''
 
-    suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+    # suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+    suits = ["\u2660",  # Spades (♠)
+              "\u2665",  # Hearts (♥)
+              "\u2666",  # Diamonds (♦)
+              "\u2663"]  # Clubs (♣)
     face_names = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10',
                   'Jack', 'Queen', 'King']
     values = ['Ace', 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]*4
@@ -175,8 +179,8 @@ def display_dealer_initial_hand(hand):
         - print to console, returns None
     '''
 
-    first_card = list(hand.values())[0]
-    print(f'==> Dealer has: {first_card} and unknown card')
+    first_card = list(hand.keys())[0]
+    print(f'==> Dealer has: {first_card} and a hidden card')
 
 
 def join_and(lst, primary_delimeters = ', ', last_delimeter = 'and'):
@@ -215,7 +219,7 @@ def display_player_hand(hand, message):
     displays all cards in the player's hand and hand's total value
     '''
 
-    full_hand = list(hand.values())
+    full_hand = list(hand.keys())
     string_to_insert = join_and(full_hand)
     hand_total = evaluate_hand_total(hand)
     print(f'==> {message}: {string_to_insert}, totaling {hand_total}.')
@@ -259,8 +263,10 @@ def dealer_strategy(dealer_hand, deck):
     print('==> Dealer\'s turn...')
     time.sleep(2)
     if evaluate_hand_total(dealer_hand) < 17:
-        dealer_hand.update(deal_card(deck))
-        print('==> Dealer hits.')
+        new_card = deal_card(deck)
+        dealer_hand.update(new_card)
+        card = list(new_card.keys())[0]
+        print(f'==> Dealer hits and draws: {card}.')
         return dealer_hand
     print('==> Dealer stays.')
     time.sleep(2)
@@ -300,8 +306,8 @@ def main():
             break
     total_player_hand = evaluate_hand_total(player_hand)
     total_dealer_hand = evaluate_hand_total(dealer_hand)
-    print(f'==> Your final hand is: {join_and(list(player_hand.values()))}. '
-          f'The dealer\'s final hand is: {join_and(list(dealer_hand.values()))}')
+    print(f'==> Your final hand is: {join_and(list(player_hand.keys()))}. '
+          f'The dealer\'s final hand is: {join_and(list(dealer_hand.keys()))}')
     time.sleep(1)
     print(f'==> Player\'s total hand is {total_player_hand}.')
     time.sleep(1)
