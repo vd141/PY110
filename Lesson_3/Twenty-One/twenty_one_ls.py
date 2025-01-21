@@ -83,6 +83,29 @@ def grand_output(dealer_cards, dealer_total, player_cards, player_total):
     prompt(f"Player has {hand(player_cards)}, for a total of: {player_total}")
     print('==============')
 
+def update_score(player_total, dealer_total, player_score, dealer_score):
+    if player_total > dealer_total:
+        player_score += 1
+    if player_total < dealer_total:
+        dealer_score += 1
+
+    return player_score, dealer_score
+
+def match_winner(player_score, dealer_score):
+    if player_score >= 3:
+        print('Player is the first to reach 3 points! Player wins match.')
+        return "Player"
+    if dealer_score >= 3:
+        print('Dealer is the first to reach 3 points! Dealer wins match.')
+        return "Dealer"
+    return None
+
+def display_score(player_score, dealer_score):
+    print(f'Player score is: {player_score}. Dealer score is: {dealer_score}')
+
+player_score = 0
+dealer_score = 0
+
 while True:
     prompt('Welcome to Twenty-One!')
 
@@ -117,6 +140,10 @@ while True:
     if busted(player_total):
         grand_output(dealer_cards, dealer_total, player_cards, player_total)
         display_results(dealer_total, player_total)
+        dealer_score += 1
+        display_score(player_score, dealer_score)
+        if match_winner(player_score, dealer_score):
+            break
         if play_again():
             continue
     else:
@@ -135,6 +162,10 @@ while True:
         prompt(f"Dealer total is now: {dealer_total}")
         grand_output(dealer_cards, dealer_total, player_cards, player_total)
         display_results(dealer_total, player_total)
+        player_score += 1
+        display_score(player_score, dealer_score)
+        if match_winner(player_score, dealer_score):
+            break
         if play_again():
             continue
     else:
@@ -145,6 +176,14 @@ while True:
     grand_output(dealer_cards, dealer_total, player_cards, player_total)
 
     display_results(dealer_total, player_total)
+
+    player_score, dealer_score = update_score(player_total, dealer_total,
+                                              player_score, dealer_score)
+
+    display_score(player_score, dealer_score)
+
+    if match_winner(player_score, dealer_score):
+        break
 
     if not play_again():
         break
@@ -187,5 +226,6 @@ while True:
     '''
     best of five
 
-    
+    each opponent starts with a score of 0. when one opponent busts the other gains
+    a point. opponent also scores when they win with a higher score
     '''
