@@ -77,6 +77,12 @@ def pop_two_from_deck(deck):
 def hand(cards):
     return ', '.join(cards)
 
+def grand_output(dealer_cards, dealer_total, player_cards, player_total):
+    print('==============')
+    prompt(f"Dealer has {hand(dealer_cards)}, for a total of: {dealer_total}")
+    prompt(f"Player has {hand(player_cards)}, for a total of: {player_total}")
+    print('==============')
+
 while True:
     prompt('Welcome to Twenty-One!')
 
@@ -109,6 +115,7 @@ while True:
             break
 
     if busted(player_total):
+        grand_output(dealer_cards, dealer_total, player_cards, player_total)
         display_results(dealer_total, player_total)
         if play_again():
             continue
@@ -126,6 +133,7 @@ while True:
 
     if busted(dealer_total):
         prompt(f"Dealer total is now: {dealer_total}")
+        grand_output(dealer_cards, dealer_total, player_cards, player_total)
         display_results(dealer_total, player_total)
         if play_again():
             continue
@@ -134,10 +142,7 @@ while True:
 
     # both player and dealer stays - compare cards!
 
-    print('==============')
-    prompt(f"Dealer has {hand(dealer_cards)}, for a total of: {dealer_total}")
-    prompt(f"Player has {hand(player_cards)}, for a total of: {player_total}")
-    print('==============')
+    grand_output(dealer_cards, dealer_total, player_cards, player_total)
 
     display_results(dealer_total, player_total)
 
@@ -170,4 +175,17 @@ while True:
 
     in the other two play_again calls, Python must skip over the remaining code
     (dealer decisions, game result messages) if the player decides to play again
+    '''
+
+    '''
+    ending the round
+
+    extracted grand output to a function and invoked function when either player
+    busts
+    '''
+
+    '''
+    best of five
+
+    
     '''
