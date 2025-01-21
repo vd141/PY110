@@ -158,3 +158,16 @@ while True:
         final dealer results -> can get from total in main loop
     '''
 
+    '''
+    The last play_again call
+
+    the last play_again call is different from the first two in that a break statement
+    follows, whereas a continue statement follows each of the first two calls.
+
+    since the last play_again call is at the end of the main while loop, there is
+    no need to continue over the loop if the player decides to continue playing.
+    there is no code to run after the last play_again call
+
+    in the other two play_again calls, Python must skip over the remaining code
+    (dealer decisions, game result messages) if the player decides to play again
+    '''
