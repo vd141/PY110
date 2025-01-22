@@ -71,8 +71,12 @@ def display_results(dealer_total, player_total):
 
 def play_again():
     print("-------------")
-    answer = input('Do you want to play again? (y or n) ')
-    return answer == 'y'
+    valid_inputs = ['y', 'Y', 'Yes', 'yes', 'n', 'N', 'No', 'no']
+    while True:
+        answer = input('Do you want to play again? (y or n) ')
+        if answer in valid_inputs:
+            return answer in ['y', 'Y', 'Yes', 'yes']
+        print(f'Valid inputs are {', '.join(valid_inputs)}')
 
 def pop_two_from_deck(deck):
     return [deck.pop(), deck.pop()]
@@ -241,5 +245,7 @@ while True:
 
     '''
     improve input handling
+
+
     
     '''
