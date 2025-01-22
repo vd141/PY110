@@ -3,6 +3,9 @@ import random
 SUITS = ('H', 'D', 'S', 'C')
 VALUES = ('2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A')
 
+WINNING_LIMIT = 21
+DEALER_LIMIT = 17
+
 def prompt(message):
     print(f"=> {message}")
 
@@ -27,7 +30,7 @@ def total(cards):
     # Correct for Aces
     for card in cards:
         value = card[:-1]
-        if sum_val <= 21:
+        if sum_val <= WINNING_LIMIT:
             break
         if value == "A":
             sum_val -= 10
@@ -35,13 +38,13 @@ def total(cards):
     return sum_val
 
 def busted(player_total):
-    return player_total > 21
+    return player_total > WINNING_LIMIT
 
 def detect_result(dealer_total, player_total):
 
-    if player_total > 21:
+    if player_total > WINNING_LIMIT:
         return 'PLAYER_BUSTED'
-    elif dealer_total > 21:
+    elif dealer_total > WINNING_LIMIT:
         return 'DEALER_BUSTED'
     elif dealer_total < player_total:
         return 'PLAYER'
@@ -152,7 +155,7 @@ while True:
     # dealer turn
     prompt("Dealer's turn...")
 
-    while dealer_total < 17:
+    while dealer_total < DEALER_LIMIT:
         prompt("Dealer hits!")
         dealer_cards.append(deck.pop())
         dealer_total = total(dealer_cards)
@@ -228,4 +231,15 @@ while True:
 
     each opponent starts with a score of 0. when one opponent busts the other gains
     a point. opponent also scores when they win with a higher score
+    '''
+
+    '''
+    more constants
+
+    set constants for winning limit and dealer limit (21 and 17)
+    '''
+
+    '''
+    improve input handling
+    
     '''
