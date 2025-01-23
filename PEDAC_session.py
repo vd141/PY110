@@ -33,6 +33,15 @@ Algorithm:
     to a list
     - return the parent list
     
+**Victor**
+Algorithm (create all possible pairs from list first):
+  - sort list first
+  - use a nested for loop to create all possible pairs
+  - append all possible pairs to a full list
+  - loop through each element (sublist) of the full list
+    - check if there is a difference of 2 between the first and second value of that element
+  - if there is, add that element to a final set (set removes duplicates)
+  - convert final set to list and return that list
 '''
 
 
