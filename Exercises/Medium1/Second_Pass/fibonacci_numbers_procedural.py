@@ -24,8 +24,8 @@ def fibonacci(nth):
     f_1 = 1
     f_2 = 1
     new_fib = None
-    
-    for index in range(3, nth + 1):
+
+    for _ in range(3, nth + 1):
         new_fib = f_1 + f_2
         f_2 = f_1
         f_1 = new_fib
