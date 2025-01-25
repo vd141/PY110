@@ -21,3 +21,4 @@ print(fibonacci(5) == 5)         # True
 print(fibonacci(6) == 8)         # True
 print(fibonacci(12) == 144)      # True
 print(fibonacci(20) == 6765)     # True
+print(fibonacci(60))
