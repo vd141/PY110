@@ -1,60 +1,49 @@
 def triangle(side1, side2, side3):
     '''
-    takes the lengths of the three sides of a triangle as arguments and returns
-    one of the following four strings representing the triangle's classification
-        - equilateral
-        - isoceles
-        - scalene
-        - invalid
+    input: 3 integer sides
+    output: string describing type of triangle
 
-    store sides in a set
+    requirements:
+        - a valid triangle has:
+            - sum of the 2 shorter sides must be greater than longest side
+            - every side must have a length greater than 0
+        - equilateral:
+            - all 3 sides have the same length
+        - isosceles:
+            - two sides have the same length, while the third is different
+        - scalene:
+            - all three sides have different lengths
 
-    a valid triangle has:
-        - sum of the lengths of the two shortest sides > length of the longest
-          side
-            - use max function to get the longest of the three sides
-            - use set operation to get the remaining two sides
-            - sum the remaining two sides to determine if it is larger than the
-              max
-        - every side must have length greater than 0
-            - return invalid if one of the lengths is lessthan or equal to 0
-
-    if side1 == side2 == side3, then it is equilateral
-
-    if two sides are of the same length and the third is different, isoceles
-
-    if all three sides have different lengths, it is scalene
-
-    determine if the triangle is valid first
-        - if it is, then determine if it is one of the three types
+    if the triangle is valid, determine what type of triangle it is
+        - to check validity:
+            - check if any of the sides are 0. if so, return 'invalid'
+                - if 0 in the list of sides
+            - sum of two shorter sides must be lnoger than longest side
+                - get longest side by finding the max of the three sides
+                - get sum of all three sides and subtract the max from the sum
+                    - if the result is less than or equal to the max, return False
+        - to check for equilateral, check for equivalence between all three sides
+        - to check for isoceles, check that the length of the set of all three sides is 2
+        - to check for scalene, check that the length of the set of all three sides is 3
     '''
-
-    if not is_valid(side1, side2, side3):
-        return 'invalid'
-    
-    sides = {side1, side2, side3}
-
-    match len(sides):
-        case 1:
+    if is_valid(side1, side2, side3):
+        set_of_sides = set([side1, side2, side3])
+        if len(set_of_sides) == 1:
             return 'equilateral'
-        case 2:
+        if len(set_of_sides) == 2:
             return 'isosceles'
-        case 3:
+        if len(set_of_sides) == 3:
             return 'scalene'
-    
-
+    else:
+        return 'invalid'
 
 def is_valid(side1, side2, side3):
-    if side1 <= 0:
-        return False
-    if side2 <= 0:
-        return False
-    if side3 <= 0:
-        return False
     sides = [side1, side2, side3]
+    if 0 in sides:
+        return False
     longest = max(sides)
-    sides.remove(longest)
-    if sum(sides) >= longest:
+    perim = sum(sides)
+    if perim - longest > longest:
         return True
     return False
 

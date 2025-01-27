@@ -21,6 +21,9 @@ def find_fibonacci_index_by_length(length):
     n_1 = 1
     index = 3
 
+    if length == 1:
+        return length
+
     while True:
         current = n_1 + n_2
 

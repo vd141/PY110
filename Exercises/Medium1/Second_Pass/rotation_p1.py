@@ -1,27 +1,30 @@
 def rotate_list(elements):
-    import copy
     '''
-    rotates a list by moving the first element to the end of the list
+    rotates a list by moving the first element to the end of the list. does not
+    mutate the original list
 
-    returns a new list, does not mutate the original
+    return an empty list if the input is an empty list.
 
-    use string slicing to grab the first element and append it to a slice of
-    the remaining elements
+    return None if the input is not a list
 
-    return None if argument is not a list
+    create a copy of the original list
 
-    return an empty list if argument is empty
-
-    return a copy if the list is one element long
+    pop the first element of the list and append it to the back
     '''
 
-    if not isinstance(elements, list):
-        return None
+    if elements == []:
+        return []
     
-    if len(elements) <= 1:
-        return copy.deepcopy(elements)
+    if not isinstance(elements, list):
+        return
 
-    return elements[1:] + [elements[0]]
+    new_list = elements.copy()
+    new_list.append(new_list.pop(0))
+
+    return new_list
+
+
+
 
 # All of these examples should print True
 
