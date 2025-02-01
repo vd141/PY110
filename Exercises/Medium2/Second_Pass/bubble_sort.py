@@ -1,39 +1,34 @@
 def bubble_sort(lst1):
     '''
-    input: unsorted list
-    output: sorted list (mutates input)
+    sorts (and mutates) and input list
+    input list contains at least two elements
+
+    input: list of at least two elements
+    output: sorted list
 
     requirements:
-        - list contains at least two elements
-
+        - types of elements in list: integers, strings
+    
     data structures:
-        - mutate list in place
+        - the list we are sorting
 
     algorithm:
-        - keep track of two consecutive indexes
-        - keep track of a sorted boolean. initial value is False
-        - iterate through the list to compare the values of each index
-        - if the pair of values is unsorted, sort the pair
-            - set the sorted boolean to True
-        - increment both indexes until the first index is 2 less than the length of the list
-        - once all the values have been compared in a pass, check to see if the sorted boolean
-          is false. if it is, the list is sorted and can be returned. if it isn't, reset the indexes
-          and run another pass of the sorting algorithm
+        - loop through the list and compare two elements at a time
+        - swap the elements if they are out of place
+        - repeat above steps until no elements have been swapped
+            - we don't know how many times we will have to repeat the above steps (while loop)
+        - keep track of whether elements have been swapped
+
     '''
 
     while True:
-        idx_1 = 0
-        idx_2 = 1
-        sorted = False
-
-        for _ in range(len(lst1) - 1):
-            if lst1[idx_1] > lst1[idx_2]:
-                lst1[idx_1], lst1[idx_2] = lst1[idx_2], lst1[idx_1]
-                sorted = True
-            idx_1 += 1
-            idx_2 += 1
-        
-        if sorted is False:
+        swapped = False
+        for ind1 in range(0, len(lst1) - 1):
+            ind2 = ind1 + 1
+            if lst1[ind1] > lst1[ind2]:
+                lst1[ind2], lst1[ind1] = lst1[ind1], lst1[ind2]
+                swapped = True
+        if swapped == False:
             return lst1
             
 lst1 = [5, 3]

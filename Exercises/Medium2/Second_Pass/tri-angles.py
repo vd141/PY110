@@ -2,75 +2,53 @@ TRIANGLE_SUM_ANGLE = 180
 
 def triangle(ang1, ang2, ang3):
     '''
-    right: one angle is a right angle (exactly 90 deg)
-    acute: all three angles are less than 90 deg
-    obtuse: one angle is greater than 90 deg
+    return triangle type (acute, right, obtuse), invalid if otherwise
 
-    valid triangle:
-        - sum of angles must be exactly 180 deg
-        - every angle must be greater than 0
+    an valid triangle:
+        - sum of the angles is 180 deg
+        - every angle is greater than 0
 
-    if the triangle is valid, determine what type of triangle it is
+    an acute triangle
+        - has all angles less than 90 deg
 
-    input: 3 angles
-    output: string of triangle type
+    right triangle
+        - has one 90 deg angle
 
-    Data structures:
-        - list of angles
+    obtuse triangle:
+        - has one angle greater than 90 deg
 
-    to determine validity:
-        - evaluate sum of angles
-        - check to see if angles are greater than 0
+    inputs: 3 angles (integers, positive)
+    outputs: string of triangle type
 
-    right:
-        - check if 90 is in the list of angles
-    acute:
-        - check if angle is less than 90 deg (use subfunction)
-        - subfunction evaluates one angle and returns true if it is less than 90 deg
-        - use a list comprehension of the subfunction evaluating each angle
-        - use all() to determine if the subfunctino returned true for all angles
-    obtuse:
-        - check if angle is greater than 90 deg(use subfunction)
-        - subfunction evaluates one angle and returns true if it is greater than 90 deg
-        - use a list comprehension of the subfxn evaluating each angle
-        - use any() to determine if the subfunction returned True for any angle
+    data structures:
+        - none at the moment
 
+    algorithm:
+        - determine if triangle is valid (sep function)
+            - if sum != 180, invalid
+            - if 0 in list of angles, invalid
+        - if it is, determine what type of triangle it is
+        - check if there is a 90 deg angle, -> right
+        - check if there is an angle greater than 90 deg, -> obtuse
+        - otherwise, acute 
     '''
 
-    list_angles = [ang1, ang2, ang3]
+    angles = [ang1, ang2, ang3]
 
-    if is_valid(list_angles):
-        if is_right(list_angles):
+    if is_valid(angles):
+        if 90 in angles:
             return 'right'
-        if all([is_acute(angle) for angle in list_angles]):
-            return 'acute'
-        if any([is_obtuse(angle) for angle in list_angles]):
+        elif any([angle > 90 for angle in angles]):
             return 'obtuse'
-    else:
-        return 'invalid'
+        else:
+            return 'acute'
+    return 'invalid'
 
-def is_valid(list_angles):
-    if sum(list_angles) != TRIANGLE_SUM_ANGLE:
-        return False
-    if any([not valid_angle(angle) for angle in list_angles]):
+def is_valid(angles):
+    if sum(angles) != 180 or 0 in angles:
         return False
     return True
-    
-def valid_angle(angle):
-    if angle > 0:
-        return True
-    return False
 
-def is_right(list_angles):
-    if 90 in list_angles:
-        return True
-    return False
-
-def is_acute(angle):
-    return True if angle < 90 else False
-
-def is_obtuse(angle):
-    return True if angle > 90 else False
 
 print(triangle(60, 70, 50) == "acute")      # True
 print(triangle(30, 90, 60) == "right")      # True

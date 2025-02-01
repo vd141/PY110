@@ -1,37 +1,45 @@
-def fibonacci(num):
+def fibonacci(index):
     '''
-    keep track of the two fibonacci numbers needed for the next fibonacci number
+    first two fibonacci numbers are 1. every subsequent number is the sum of the
+    two preceding numbers. so the third fibonacci number is 1 + 1 = 2. the fourth 
+    fibonacci number is 2 + 1. 
 
-    one number will be called previous
-    the other will be called current
+    requirements:
+        - function returns the num (input) th fibonaci number
+        - num is assumed to be positive
+        - num is assumed to be an integer
 
-    next will be calculated from the sum of previous and current
+    input:
+        - integer (fibonacci index)
+    output:
+        - integer (fibonacci number)
 
-    previous then gets current and current then gets next
+    data structures:
+        - none
 
-    return current
-
-    the first calculated value of next is the 3rd number in the sequence
-
-    the first two fibonacci numbers are 1 and 1
-
-    increment the index after we calculate the next fibonacci number. if the
-    index matches num, then we return the fibonaci number
+    algorithm:
+        - if the index is 1 or 2, return 1
+        - otherwise, calculate the fibonacci number until the input index is reached
+        - use a variable to keep track of the current fibonacci index
+        - use a variable to keep track of the current and previous addend.
+        - update the current and previous addend when a new fibonacci number is
+          calculated
+        - if index is reached, return the fibonacci number
     '''
 
+    if index in [1, 2]:
+        return 1
+    
     previous = 1
     current = 1
-    index = 3
-
-    if num in [1, 2]:
-        return 1
+    current_index = 3
 
     while True:
-        next = previous + current
+        next = current + previous
         previous, current = current, next
-        if index == num:
+        if current_index == index:
             return next
-        index += 1
+        current_index += 1
 
 print(fibonacci(1) == 1)                  # True
 print(fibonacci(2) == 1)                  # True

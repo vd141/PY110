@@ -1,29 +1,24 @@
-def rotate_list(elements):
+def rotate_list(list1):
     '''
-    rotates a list by moving the first element to the end of the list. does not
-    mutate the original list
+    rotates the list by moving the first element to the end of the list
 
-    return an empty list if the input is an empty list.
+    returns none if the input is not a list
 
-    return None if the input is not a list
+    if input is empty, return an empty list
 
-    create a copy of the original list
+    data structure: 
+        - none
 
-    pop the first element of the list and append it to the back
+    algorithm:
+        - check if the input is a list
+        - check if the input is empty
+        - rotate the list
     '''
 
-    if elements == []:
-        return []
-    
-    if not isinstance(elements, list):
+    if not isinstance(list1, list):
         return
-
-    new_list = elements.copy()
-    new_list.append(new_list.pop(0))
-
-    return new_list
-
-
+    
+    return list1 if list1 == [] else list1[1:] + [list1[0]]
 
 
 # All of these examples should print True

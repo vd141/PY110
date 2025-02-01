@@ -2,45 +2,45 @@ LARGEST_FEATURED = 9876543201
 
 def next_featured(num):
     '''
-    featured number is 
-        - an odd number that is a multiple of 7
-        - all of its digits occur exactly once each
-    largest possible featured number is 9876543201
-    
-    takes an integer as an argument and returns the next featured number
-    greater than the integer. issues an error message if there is no next
-    featured number
+    a featured number is an odd number that is a multiple of 7, with all of its
+    digits occurring exactly once
 
-    inputs: an integer
-    outputs: an integer
+    input: a positive integer
+    output: returns next featured number greater than input. or error message if
+    no such number exists
 
-    data structures:
-        - none
+    data structure:
+        - none atm
 
-    algorithms:
-    starting from num + 1, check each number to see if it is a multiple of 7
-    and if all of its digits occur exactly once each, and if it is odd
-        - use mod to check if multiple of 7
-        - convert to string and compare string length to length of set of
-          string
-
-    to optimize the algorithm, we don't have to check every single number above
-    the input. instead once we find an odd multiple of 7, we can check every 14
-    numbers from that number
+    algorithm:
+        - loop through all numbers between num + 1 and the LARGEST_FEATURED
+            - can optimize by only looping through multiples of 7
+            - once we encounter a number that is a multiple of 7, we can update a
+            gap variable to change the interview between candidates
+        - determine if a number is a featured number (helper function)
     '''
-
-    check_num = num + 1
+    
+    gap = 1
+    candidate = num + 1
 
     while True:
-        if check_num > LARGEST_FEATURED:
+        if is_featured(candidate):
+            return candidate
+        if candidate > LARGEST_FEATURED:
             return 'There is no possible number that fulfills those requirements.'
-        if check_num % 7 == 0 and check_num % 2 != 0:
-            if len(str(check_num)) == len(set(str(check_num))):
-                return check_num
-            check_num += 14
-            continue
-        check_num += 1
+        if candidate % 7 == 0:
+            gap = 7
+        candidate += gap
+        
 
+def is_featured(num):
+    unique_digits = len(str(num)) == len(set(str(num)))
+    mult_of_7 = num % 7 == 0
+    odd = num % 2 != 0
+
+    return True if unique_digits and mult_of_7 and odd else False
+
+print(is_featured(7))
     
 
 print(next_featured(12) == 21)                  # True
